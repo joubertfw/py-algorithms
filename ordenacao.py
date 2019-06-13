@@ -1,28 +1,31 @@
 import time
 
+# OK
 def readTime(func, **kwargs):
     start_time = time.time()
     func(**kwargs)
     elapsed_time = time.time() - start_time
-    retorno = "{0:.5f}".format(elapsed_time)
-    return ("\n%s" % (retorno))
+    retorno = "{0:.9f}".format(elapsed_time)
+    return ("%s seg" % (retorno))
 
+# OK
 def bubbleSort(arr = []):
     for i in range(0, len(arr)):
-        for j in range(0, len(arr)):
+        for j in range(i, len(arr)):
             if arr[i] > arr[j]:
-                temp = arr[i]
-                arr[i] = arr[j]
-                arr[j] = temp
+                arr[i], arr[j] = arr[j], arr[i]
+    return arr
 
+# OK
 def insertionSort(arr = []):
-    for i in range(1, len(arr)):
+    for i in range(0, len(arr)):
         temp = arr[i]
         j = i
         while j > 0 and temp < arr[j - 1]:
             arr[j] = arr[j - 1]
             j -= 1
         arr[j] = temp
+    return arr
 
 def mergeSort(arr = []):
     if len(arr) > 1:
@@ -48,17 +51,34 @@ def mergeSort(arr = []):
             arr[k] = arrRight[j]
             j += 1
             k += 1
+    return arr
 
-def quickSort(arr=[]):
-    pvs = 0
-    if len(arr) > 3:
-        pvs = (arr[0]+arr[len(arr)//2]+arr[len(arr)])//3
-    else:
-        pvs = arr[len(arr)]
-    if len(arr) > 1:
-        for i in range(0, len(arr) - 1):
-            if arr[i] < pvs and arr[i + 1] > pvs:
-                arrLeft = arr[:i]
-                arrRight = arr[i:]
-                quickSort(arr = arrLeft)
-                quickSort(arr = arrRight)
+#OK
+def quickSort(arr = []):
+    if arr:
+        pv = (arr[0] + arr[len(arr)//2] + arr[len(arr) - 1])//3
+        left = [x for x in arr if x < pv]
+        right = [x for x in arr if x > pv]
+        if len(left) > 1:
+            left = quickSort(left)
+        if len(right) > 1:
+            right = quickSort(right)
+        return left + [pv] * arr.count(pv) + right
+    return []
+
+
+with open('num.txt', 'r') as f:
+    a = [int (x) for x in f.read().split()]
+    print("\n\n")
+    print("---------------------------------------------------------------")
+    print("BubbleSort: {}".format(readTime(bubbleSort, arr = list(a))))
+    print("---------------------------------------------------------------")
+    print("InsertionSort: {}".format(readTime(insertionSort, arr = list(a))))
+    print("---------------------------------------------------------------")
+    print("QuickSort: {}".format(readTime(quickSort, arr = list(a))))
+    print("---------------------------------------------------------------")
+    print("\n\n")
+    
+    # print(bubbleSort(arr = list(a)))
+    #print(insertionSort(arr = list(a)))
+    # print(quickSort(arr = list(a)))
