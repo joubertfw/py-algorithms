@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 def splineNat (x, a):
     n = len(x)
     h = [0] * n
@@ -101,18 +104,39 @@ def functionOutput(x, fx):
     for i in range(0, len(x)):
         print('{},{}'.format(x[i], fx[i]))
 
-x, fx = readFile("input")
+x, fx = readFile("input.txt")
 
-# a, b, c, d = splineNat(x[:len(x) - 1], fx[:len(x) - 1])
+a, b, c, d = splineNat(x[:len(x) - 1], fx[:len(x) - 1])
+
+a1, b1, c1, d1 = splineClamp(x[:len(x) - 1], fx[:len(x) - 1], fpo = x[len(x) - 1], fpn = fx[len(x) - 1])
 
 # printf(a, "a")
 # printf(b, "b")
 # printf(c, "c")
 # printf(d, "d")
 
-a, b, c, d = splineClamp(x[:len(x) - 1], fx[:len(x) - 1], fpo = x[len(x) - 1], fpn = fx[len(x) - 1])
+# printf(a1, "a1")
+# printf(b1, "b1")
+# printf(c1, "c1")
+# printf(d1, "d1")
 
-printf(a, "a")
-printf(b, "b")
-printf(c, "c")
-printf(d, "d")
+varx = []
+vary = []
+vary1 = []
+
+for j in range(0, len(x) - 2):
+    for i in np.arange(x[j], x[j + 1], 0.02):
+        
+        # polinomios de spline natural        
+        tmp = a[j] + b[j]*(i - x[j]) + c[j]*(i - x[j])**2 + d[j]*(i - x[j])**3
+        vary.append(tmp)
+        varx.append(i)
+        
+        # polinomios de spline fixado        
+        tmp = a1[j] + b1[j]*(i - x[j]) + c1[j]*(i - x[j])**2 + d1[j]*(i - x[j])**3
+        vary1.append(tmp)
+
+plt.plot(x[:len(x) - 1], fx[:len(fx) - 1], 'x')
+plt.plot(varx, vary)
+plt.plot(varx, vary1)
+plt.show()
