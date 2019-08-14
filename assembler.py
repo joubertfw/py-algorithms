@@ -28,10 +28,21 @@ def getSimbol(line):
         return line
     return ""
 
+def readOpcodes(file):
+    opcodeTb = []
+    with open(file, "r") as f:
+        for line in f.readlines():
+            line = line.split('#')[0]
+            comm = line.split(' ')[0]
+            code = line.split(' ')[1].split('\n')[0] # reading hex
+            #code = int(code, 16) # hex to decimal
+            #code = str(bin(code))[2:] # decimal to binary
+            opcodeTb.append((comm, code))
+    return opcodeTb
+
 def readFile(file):
-    # prime = 20988936657440586486151264256610222593863921
     hashTb = {}
-    # s = []
+    s = []
     labels = []
     functions = []
     isFuncaoControl = False
@@ -55,9 +66,14 @@ def readFile(file):
 
 labels, functions, hashTb = readFile("printFinal.asm")
 
-print(hashTb['opc1'])
+opcodeTb = readOpcodes("opcodes")
+
+for i in opcodeTb:
+    print(i)
+
+# print(hashTb['opc1'])
+
 
 # print("labels: \n\n" + labels)
 # print("\n___________________________________________\n")
 # print("functions: \n\n" + functions)
-
