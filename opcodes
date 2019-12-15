@@ -1,0 +1,11 @@
+call e8 8
+cmp 803c 14
+jmp eb 2
+je 74 6
+syscall 0f05 4
+ret c3 2
+push 5 1
+mov1 48 2
+mov3 48bf 7
+mov4 c60425 7
+inc 48ff 3
